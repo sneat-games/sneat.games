@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sneat-games",
+  "compatibility_date": "2026-06-23",
+  "workers_dev": true,
+  // Edge router (worker.js): folds /en/ -> /, sends unprefixed legal pages to
+  // the default locale, and otherwise serves the built static asset. There is
+  // no app behind this site — an asset miss 404s as itself.
+  "main": "worker.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none"
+  }
+  // GO LIVE ON THE APEX — commented out so the repo deploys to workers.dev
+  // immediately (a working preview) with no domain dependency. To serve
+  // sneat.games: uncomment below and attach the custom domain once in the
+  // Cloudflare dashboard (needs a Zone:DNS:Edit token). CI then keeps the
+  // worker in sync. We deliberately do NOT add a www custom domain — use a
+  // zone Redirect Rule (www -> apex, 301) instead.
+  // ,"routes": [
+  //   { "pattern": "sneat.games", "custom_domain": true }
+  // ]
+}

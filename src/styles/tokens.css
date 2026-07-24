@@ -1,0 +1,40 @@
+/*
+ * Landing design tokens — Sneat.games.
+ *
+ * A playful violet palette that keeps sneat.games visually distinct from the
+ * other Sneat products. Everything else maps onto these tokens via global.css,
+ * so this file is the single place to re-theme.
+ */
+:root {
+  /* Brand */
+  --brand-primary: #7c3aed;        /* violet — CTAs, accents */
+  --brand-primary-strong: #6d28d9; /* hover / shade */
+  --brand-accent: #c4b5fd;         /* light accent */
+  --brand-ink: #1b1436;            /* primary text + footer */
+  --brand-muted: #5f5a73;          /* muted text */
+
+  /* Chrome */
+  --brand-bg: #faf9ff;            /* page background */
+  --brand-surface: #ffffff;       /* cards */
+  --brand-soft: #f4f1ff;          /* alt section */
+  --brand-hero-1: #f2ecff;        /* hero gradient top */
+  --brand-hero-2: #e4dbff;        /* hero gradient bottom */
+  --brand-border: #ebe6f9;
+  --brand-danger: #d64545;
+
+  /* Status pills */
+  --brand-live-bg: #ede9fe;
+  --brand-live-ink: #5b21b6;
+  --brand-soon-bg: #f0eef6;
+  --brand-soon-ink: #5f5a73;
+
+  /* Type & shape */
+  /* Montserrat ships Latin + Cyrillic, so one brand font covers both locales
+     (en + ru). Check the subsets at fonts.google.com before swapping — a face
+     without a script you ship fails silently in that language only. The
+     @font-face comes from the <link> in layouts/BaseLayout.astro. */
+  --brand-font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --brand-radius: 16px;
+  --brand-radius-pill: 999px;
+  --brand-shadow: 0 10px 26px rgba(27, 20, 54, 0.14);
+}

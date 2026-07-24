@@ -1,0 +1,15 @@
+packages:
+  - .
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+
+minimumReleaseAgeExclude:
+  - '@sneat/astro@0.1.0'
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
