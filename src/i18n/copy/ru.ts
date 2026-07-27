@@ -21,7 +21,7 @@ export const ru: Copy = {
     microcopy: '🎮 Игра в чате · 🤖 Бот или друзья · 🆓 Бесплатно',
     seoTitle: 'Sneat Games — простые игры прямо в Telegram',
     seoDescription:
-      'Играйте в Реверси, «Камень-ножницы-бумага» и Greed Game прямо в Telegram — против бота или с друзьями. Без установки, бесплатно.',
+      'Играйте в Chess Raiders, Реверси, «Камень-ножницы-бумага» и Greed Game прямо в Telegram — против бота или с друзьями. Без установки, бесплатно.',
   },
 
   nav: [
@@ -43,8 +43,17 @@ export const ru: Copy = {
 
   features: {
     eyebrow: 'Игры',
-    title: 'Три игры, в которые можно сыграть прямо сейчас',
+    title: 'Четыре игры, в которые можно сыграть прямо сейчас',
     items: [
+      {
+        icon: '♞',
+        title: 'Chess Raiders',
+        examples:
+          'Командные шахматы в реальном времени: без очереди ходов и без шаха. Захватывайте фигуры в плен, ведите конвои домой, перехватывайте чужие — и захватите короля, чтобы победить.',
+        status: 'live',
+        href: 'https://chessraiders.com/ru/',
+        cta: 'Играть в Chess Raiders',
+      },
       {
         icon: '⚫',
         title: 'Реверси',
@@ -96,6 +105,7 @@ export const ru: Copy = {
     tagline: 'Простые игры прямо в Telegram.',
     productTitle: 'Игры',
     product: [
+      { label: 'Chess Raiders', href: 'https://chessraiders.com/ru/' },
       { label: 'Реверси', href: 'https://t.me/SneatBot?start=reversi' },
       { label: 'Камень-ножницы-бумага', href: 'https://t.me/SneatBot?start=rps' },
       { label: 'Все игры', href: '#games' },

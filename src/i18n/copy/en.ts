@@ -26,7 +26,7 @@ export const en: Copy = {
     microcopy: '🎮 Play in chat · 🤖 Bot or friends · 🆓 Free to play',
     seoTitle: 'Sneat Games — casual games you play inside Telegram',
     seoDescription:
-      'Play Reversi, Rock-Paper-Scissors and the Greed Game right inside Telegram — solo against a bot or against friends. No install, free to play.',
+      'Play Chess Raiders, Reversi, Rock-Paper-Scissors and the Greed Game right inside Telegram — solo against a bot or against friends. No install, free to play.',
   },
 
   nav: [
@@ -48,8 +48,17 @@ export const en: Copy = {
 
   features: {
     eyebrow: 'The games',
-    title: 'Three games to play right now',
+    title: 'Four games to play right now',
     items: [
+      {
+        icon: '♞',
+        title: 'Chess Raiders',
+        examples:
+          'Real-time team chess with no turns and no check: raid the enemy line, escort prisoners home, intercept convoys, and capture the king to win. Play solo, 1v1 or whole teams.',
+        status: 'live',
+        href: 'https://chessraiders.com',
+        cta: 'Play Chess Raiders',
+      },
       {
         icon: '⚫',
         title: 'Reversi',
@@ -101,6 +110,7 @@ export const en: Copy = {
     tagline: 'Casual games you play right inside Telegram.',
     productTitle: 'Games',
     product: [
+      { label: 'Chess Raiders', href: 'https://chessraiders.com' },
       { label: 'Reversi', href: 'https://t.me/SneatBot?start=reversi' },
       { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatBot?start=rps' },
       { label: 'All games', href: '#games' },
