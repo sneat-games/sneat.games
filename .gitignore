@@ -6,3 +6,7 @@ dist/
 .env.*
 .DS_Store
 *.log
+
+# Agent scratch worktrees — a nested worktree here once showed up as
+# untracked repo content (an agent created it inside the canonical clone).
+.claude/worktrees/
