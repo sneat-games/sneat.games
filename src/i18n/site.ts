@@ -14,6 +14,9 @@ export const siteMeta: SiteMeta = {
   name: 'Sneat Games',
   // Keep in step with astro.config `site:`.
   url: 'https://sneat.games',
+  // Fallback only. SiteMeta is locale-independent, so this line can only ever be
+  // one language; BaseLayout passes the page locale's own seoDescription as
+  // `siteDescription`, and that is what reaches the JSON-LD graph.
   description: getCopy('en').site.seoDescription,
   companyUrl: 'https://sneat.co',
   // No app on this site, so no consent-banner GA is wired by default. Set an id
