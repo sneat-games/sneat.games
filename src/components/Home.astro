@@ -62,56 +62,26 @@ const home = localeHref(locale, "/");
   </div>
 </section>
 
-<!-- Games -->
+<!-- Games — ONE section, one card per game. A game with two homes (Reversi:
+     Telegram now, browser soon) lists both on its own card rather than
+     appearing once per surface, which is what the old split sections did. -->
 <section id="games" class="section soft">
   <div class="container">
     <div class="text-center section-head">
-      <p class="eyebrow">{copy.features.eyebrow}</p>
-      <h2>{copy.features.title}</h2>
+      <p class="eyebrow">{copy.games.eyebrow}</p>
+      <h2>{copy.games.title}</h2>
+      {copy.games.lede && <p class="section-lede">{copy.games.lede}</p>}
     </div>
 
     <div class="grid grid-3 featured">
       {
-        copy.features.items.map((f) => (
+        copy.games.items.map((g) => (
           <ServiceCard
-            icon={f.icon}
-            title={f.title}
-            examples={f.examples}
-            status={f.status}
-            href={f.href}
-            cta={f.cta}
-            liveLabel={copy.cardLabels.live}
-            soonLabel={copy.cardLabels.soon}
-            roadmapLabel={copy.cardLabels.roadmap}
-          />
-        ))
-      }
-    </div>
-  </div>
-</section>
-
-<!-- Browser games -->
-<section id="browser-games" class="section">
-  <div class="container">
-    <div class="text-center section-head">
-      <p class="eyebrow">{copy.browserGames.eyebrow}</p>
-      <h2>{copy.browserGames.title}</h2>
-      {copy.browserGames.lede && <p class="section-lede">{copy.browserGames.lede}</p>}
-    </div>
-
-    <div class="grid grid-3 featured">
-      {
-        copy.browserGames.items.map((f) => (
-          <ServiceCard
-            icon={f.icon}
-            title={f.title}
-            examples={f.examples}
-            status={f.status}
-            href={f.href}
-            cta={f.cta}
-            liveLabel={copy.cardLabels.live}
-            soonLabel={copy.cardLabels.soon}
-            roadmapLabel={copy.cardLabels.roadmap}
+            icon={g.icon}
+            title={g.title}
+            examples={g.examples}
+            platforms={g.platforms}
+            labels={copy.cardLabels}
           />
         ))
       }

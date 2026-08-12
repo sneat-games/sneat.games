@@ -5,15 +5,24 @@
  * error, but it cannot tell you a translation has gone stale. If you change a
  * claim here, change it there.
  *
- * Deep links: the "Play in Telegram" buttons open a bot with a /start payload
- * (t.me/SneatBot?start=reversi | rps). SneatBot routes that payload straight
- * into the game. The Greed Game is 'soon' until @GreedGameBot ships — flip it
- * to 'live' with href 'https://t.me/GreedGameBot?start=play' then.
+ * ONE CARD PER GAME. `games.items` lists every game exactly once; a game's
+ * `platforms` say where you can play it. Reversi is the reason: it is live in
+ * Telegram AND has a browser build coming, which used to make it two cards in
+ * two sections. Shipping a 'soon' platform means flipping its status to 'live'
+ * and giving it an href — never adding a second card somewhere else.
  *
- * The browser games (browserGames.items) are the *.sneat.games game-kit
- * family — see game-kit/docs/DESIGN.md. Bidding Tic-Tac-Toe is 'live' at
- * bidding-tictactoe.sneat.games; the rest deploy over the next days — flip
- * each to 'live' with its subdomain href + a cta once it ships.
+ * Deep links: the Telegram platforms open a bot with a /start payload
+ * (t.me/SneatBot?start=reversi | rps). SneatBot routes that payload straight
+ * into the game. The Greed Game has no platform entry at all until
+ * @GreedGameBot ships — give it { kind: 'telegram', status: 'live',
+ * href: 'https://t.me/GreedGameBot?start=play' } then.
+ *
+ * The browser games are the *.sneat.games game-kit family — see
+ * game-kit/docs/DESIGN.md.
+ *
+ * Counts live in prose too: `games.title` names how many games are playable
+ * right now and the lede how many are still coming. Recount both when a
+ * platform flips.
  */
 import type { Copy } from './types';
 
@@ -31,12 +40,11 @@ export const en: Copy = {
     microcopy: '🎮 Chat or browser · 🤖 Bot or friends · 🆓 Free to play',
     seoTitle: 'Sneat Games — casual games in Telegram and your browser',
     seoDescription:
-      'Play Chess Raiders, Reversi, Rock-Paper-Scissors and the Greed Game in Telegram, or Bidding Tic-Tac-Toe and more free strategy games right in your browser — solo against a bot or with a friend. No install, free to play.',
+      'Play Chess Raiders, Bidding Tic-Tac-Toe, Hex and Dots & Boxes free in your browser, or Reversi and Rock-Paper-Scissors inside Telegram — solo against a bot or head-to-head with a friend. No install, no account.',
   },
 
   nav: [
     { label: 'Games', href: '#games' },
-    { label: 'Browser games', href: '#browser-games' },
     { label: 'How it works', href: '#how-it-works' },
     { label: 'Why here', href: '#why' },
   ],
@@ -45,121 +53,109 @@ export const en: Copy = {
     eyebrow: 'How it works',
     title: 'Playing takes seconds',
     steps: [
-      { icon: '👆', title: 'Open a game', text: 'Tap a game below to open it in Telegram — no install, no signup.' },
-      { icon: '🎯', title: 'Pick a mode', text: 'Play solo against the bot, or challenge a friend in any chat.' },
-      { icon: '💬', title: 'Make your move', text: 'The whole game lives in one message — tap to play your turn.' },
+      { icon: '👆', title: 'Open a game', text: 'Pick a game below and open it — in your browser or in Telegram. No install, no signup.' },
+      { icon: '🎯', title: 'Pick a mode', text: 'Play solo against the bot, or challenge a friend in a chat or with a share link.' },
+      { icon: '💬', title: 'Make your move', text: 'The whole game sits on one page or in one message — tap to play your turn.' },
       { icon: '🔁', title: 'Play again', text: 'Rematch instantly, or jump into another game. Your move.' },
     ],
   },
 
-  features: {
+  games: {
     eyebrow: 'The games',
-    title: 'Four games to play right now',
+    title: 'Six games to play right now',
+    lede: 'Play in your browser or right inside Telegram — no install, no account. Every browser game has a classic mode and a hidden-bid "bidding" mode: take on the computer, even offline, or send a friend a link. Six more games are on the way.',
     items: [
       {
         icon: '♞',
         title: 'Chess Raiders',
         examples:
           'Real-time team chess with no turns and no check: raid the enemy line, escort prisoners home, intercept convoys, and capture the king to win. Play solo, 1v1 or whole teams.',
-        status: 'live',
-        href: 'https://chessraiders.com',
-        cta: 'Play Chess Raiders',
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://chessraiders.com' }],
       },
-      {
-        icon: '⚫',
-        title: 'Reversi',
-        examples:
-          'The classic disc-flipping strategy game. Pick your colour, play against an AI or a random opponent, and outflank the board to own the most discs.',
-        status: 'live',
-        href: 'https://t.me/SneatBot?start=reversi',
-        cta: 'Play in Telegram',
-      },
-      {
-        icon: '✊',
-        title: 'Rock · Paper · Scissors',
-        examples:
-          'The timeless hand game over an endless streak, with a running win–draw–loss score. The AI learns your habits — so keep it unpredictable.',
-        status: 'live',
-        href: 'https://t.me/SneatBot?start=rps',
-        cta: 'Play in Telegram',
-      },
-      {
-        icon: '💰',
-        title: 'The Greed Game',
-        examples:
-          'A hidden-bid game of nerve for a group: bid low to play it safe, or make a bold leap. Courage is rewarded, greed is punished. An original — coming to its own bot.',
-        status: 'soon',
-      },
-    ],
-  },
-
-  browserGames: {
-    eyebrow: 'Play in your browser',
-    title: 'A growing family of strategy games',
-    lede: 'Every game ships with a classic mode and a hidden-bid "bidding" mode. Play against the computer — even offline — or invite a friend with a share link. No account, ever.',
-    items: [
       {
         icon: '❌',
         title: 'Bidding Tic-Tac-Toe',
         examples:
           'Classic 3-in-a-row, plus a bidding mode where you can outbid your opponent for the square you both want.',
-        status: 'live',
-        href: 'https://bidding-tictactoe.sneat.games',
-        cta: 'Play in browser',
-      },
-      {
-        icon: '🔲',
-        title: 'Dots & Boxes',
-        examples:
-          'Draw an edge, complete a box and go again — or bid for the right to choose who plays next.',
-        status: 'soon',
+        platforms: [
+          { kind: 'browser', status: 'live', href: 'https://bidding-tictactoe.sneat.games' },
+        ],
       },
       {
         icon: '⬡',
         title: 'Hex',
         examples:
           'Connect your two sides of the board with an unbroken chain before your opponent connects theirs.',
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://hex.sneat.games' }],
       },
       {
+        icon: '🔲',
+        title: 'Dots & Boxes',
+        examples:
+          'Draw an edge, complete a box and go again — or bid for the right to choose who plays next.',
+        platforms: [
+          { kind: 'browser', status: 'live', href: 'https://dots-and-boxes.sneat.games' },
+        ],
+      },
+      {
+        // The card that merged the two old sections: one game, two homes.
         icon: '⚫',
         title: 'Reversi',
         examples:
-          'The classic disc-flipping strategy game — same rules as in Telegram, now playable straight in your browser.',
-        status: 'soon',
+          'The classic disc-flipping strategy game. Pick your colour, play against an AI or a random opponent, and outflank the board to own the most discs.',
+        platforms: [
+          { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
+          { kind: 'browser', status: 'soon', href: 'https://reversi.sneat.games' },
+        ],
+      },
+      {
+        icon: '✊',
+        title: 'Rock · Paper · Scissors',
+        examples:
+          'The timeless hand game over an endless streak, with a running win–draw–loss score. The AI learns your habits — so keep it unpredictable.',
+        platforms: [{ kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=rps' }],
+      },
+      {
+        // No platform entry yet: @GreedGameBot doesn't exist, so the card says
+        // "on the roadmap" rather than naming a surface it can't deliver.
+        icon: '💰',
+        title: 'The Greed Game',
+        examples:
+          'A hidden-bid game of nerve for a group: bid low to play it safe, or make a bold leap. Courage is rewarded, greed is punished. An original — coming to its own bot.',
+        platforms: [],
       },
       {
         icon: '🔴',
         title: 'Four in a Row',
         examples:
           'Drop your discs down the columns and line up four in a row before your opponent does.',
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'soon' }],
       },
       {
         icon: '⚪',
         title: 'Gomoku',
         examples: 'Place stones on an open board — the first to five in a row wins.',
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'soon' }],
       },
       {
         icon: '🔳',
         title: 'Ultimate Tic-Tac-Toe',
         examples:
           'Nine boards in one: win a square to send your opponent into the matching board next.',
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'soon' }],
       },
       {
         icon: '🟧',
         title: 'Domineering',
         examples:
           "Place dominoes across the grid — yours run one way, your opponent's the other — until someone runs out of room.",
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'soon' }],
       },
       {
         icon: '🔺',
         title: 'Y',
         examples: 'Claim territory on a triangular board — connect all three sides to win.',
-        status: 'soon',
+        platforms: [{ kind: 'browser', status: 'soon' }],
       },
     ],
   },
@@ -168,6 +164,8 @@ export const en: Copy = {
     live: 'Live now',
     soon: 'Coming soon',
     roadmap: 'On the roadmap',
+    play: { browser: 'Play in browser', telegram: 'Play in Telegram' },
+    coming: { browser: 'Coming to browser', telegram: 'Coming to Telegram' },
   },
 
   why: {
@@ -192,13 +190,16 @@ export const en: Copy = {
   footer: {
     tagline: 'Casual games, in Telegram and in your browser.',
     productTitle: 'Games',
+    // Live games only, in the same order as the cards above: a footer link that
+    // isn't playable yet is a dead end.
     product: [
       { label: 'Chess Raiders', href: 'https://chessraiders.com' },
+      { label: 'Bidding Tic-Tac-Toe', href: 'https://bidding-tictactoe.sneat.games' },
+      { label: 'Hex', href: 'https://hex.sneat.games' },
+      { label: 'Dots & Boxes', href: 'https://dots-and-boxes.sneat.games' },
       { label: 'Reversi', href: 'https://t.me/SneatBot?start=reversi' },
       { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatBot?start=rps' },
-      { label: 'Bidding Tic-Tac-Toe', href: 'https://bidding-tictactoe.sneat.games' },
       { label: 'All games', href: '#games' },
-      { label: 'Browser games', href: '#browser-games' },
       { label: 'How it works', href: '#how-it-works' },
     ],
     moreTitle: 'More',

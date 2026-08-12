@@ -1,46 +1,72 @@
 ---
+/**
+ * One game card: what the game is, and every way to play it.
+ *
+ * A game can have more than one home (Reversi: live in Telegram, browser build
+ * still coming), so this takes a LIST of platforms rather than one
+ * status/href/cta triplet. That list is what lets the page carry a single games
+ * section instead of one section per surface.
+ */
+import type { Copy, PlatformCopy } from "../i18n/copy/types";
+
 interface Props {
   icon: string;
   title: string;
   examples: string;
-  status?: "live" | "soon";
-  href?: string;
-  cta?: string;
-  /** Localised pill/CTA furniture — see Copy['cardLabels']. Defaults keep any
-   * caller that doesn't pass them working, in English. */
-  liveLabel?: string;
-  soonLabel?: string;
-  roadmapLabel?: string;
+  /** Empty, or every entry still 'soon', ⇒ "coming soon" pill and no links. */
+  platforms?: PlatformCopy[];
+  /** Localised pill/CTA furniture — see Copy['cardLabels']. The default keeps
+   * any caller that doesn't pass it working, in English. */
+  labels?: Copy["cardLabels"];
 }
+
+const DEFAULT_LABELS: Copy["cardLabels"] = {
+  live: "Live now",
+  soon: "Coming soon",
+  roadmap: "On the roadmap",
+  play: { browser: "Play in browser", telegram: "Play in Telegram" },
+  coming: { browser: "Coming to browser", telegram: "Coming to Telegram" },
+};
 
 const {
   icon,
   title,
   examples,
-  status = "soon",
-  href,
-  cta = "Get started",
-  liveLabel = "Live now",
-  soonLabel = "Coming soon",
-  roadmapLabel = "On the roadmap",
+  platforms = [],
+  labels = DEFAULT_LABELS,
 } = Astro.props;
-const isLive = status === "live";
+
+// A platform is only playable once it has somewhere to send you: a 'live' entry
+// with no href would otherwise render a link to nowhere.
+const playable = platforms.filter((p) => p.status === "live" && p.href);
+const upcoming = platforms.filter((p) => !(p.status === "live" && p.href));
+const isLive = playable.length > 0;
 ---
 
 <article class="service-card">
   <div class="top">
     <span class="icon" aria-hidden="true">{icon}</span>
     <span class={`pill ${isLive ? "pill-live" : "pill-soon"}`}>
-      {isLive ? liveLabel : soonLabel}
+      {isLive ? labels.live : labels.soon}
     </span>
   </div>
   <h3>{title}</h3>
   <p class="examples">{examples}</p>
-  {isLive && href ? (
-    <a class="btn btn-primary cta" href={href}>{cta} →</a>
-  ) : (
-    <span class="cta-soon">{roadmapLabel}</span>
-  )}
+  <div class="ways">
+    {playable.map((p) => (
+      /* aria-label re-attaches the game name: twelve cards otherwise offer a
+         screen reader a dozen links all called "Play in browser". */
+      <a
+        class="btn btn-primary cta"
+        href={p.href}
+        aria-label={`${labels.play[p.kind]} — ${title}`}
+      >
+        {labels.play[p.kind]} →
+      </a>
+    ))}
+    {upcoming.map((p) => <span class="cta-soon">{labels.coming[p.kind]}</span>)}
+    {platforms.length === 0 && <span class="cta-soon">{labels.roadmap}</span>}
+  </div>
 </article>
 
 <style>
@@ -72,13 +98,19 @@ const isLive = status === "live";
     color: var(--color-text-muted);
     margin: 0 0 0.9rem;
   }
-  /* margin-top:auto pins the CTA row to the bottom so cards align */
-  .cta {
+  /* margin-top:auto pins the ways-to-play block to the bottom so cards align
+     however long the description above it runs. */
+  .ways {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+  .cta {
     align-self: flex-start;
   }
   .cta-soon {
-    margin-top: auto;
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-text-muted);

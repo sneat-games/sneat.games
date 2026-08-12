@@ -20,7 +20,7 @@
 /** A nav/footer link. `href` is locale-independent; pass it through localeHref. */
 export interface LinkCopy {
   label: string;
-  /** Either a page route ('/privacy') or a same-page anchor ('#features'). */
+  /** Either a page route ('/privacy') or a same-page anchor ('#games'). */
   href: string;
 }
 
@@ -31,32 +31,63 @@ export interface StepCopy {
   text: string;
 }
 
-export interface FeatureCopy {
+/**
+ * Somewhere a game can be played.
+ *
+ * Adding a kind here is deliberately expensive: `cardLabels.play` and
+ * `cardLabels.coming` are keyed by it, so every locale is forced to name the
+ * new surface before the build goes green.
+ */
+export type PlatformKind = 'browser' | 'telegram';
+
+/**
+ * One home for one game. A game may have several — Reversi is live in Telegram
+ * while its browser build is still in progress — which is exactly why a card
+ * carries a LIST of these rather than a single status/href/cta triplet.
+ */
+export interface PlatformCopy {
+  kind: PlatformKind;
+  /** 'live' renders a link; 'soon' renders a muted "coming to …" note. */
+  status: 'live' | 'soon';
+  /**
+   * Only rendered when status is 'live' — but record the known future URL even
+   * while a game is 'soon': shipping it is then a one-word edit, and until then
+   * the card never links somewhere that 404s.
+   */
+  href?: string;
+}
+
+/**
+ * ONE CARD PER GAME. The card names the game, describes it, and lists every way
+ * to play it — so a game with two homes is still a single card, not one card
+ * per surface.
+ *
+ * No live platform (none at all, or every one still 'soon') ⇒ the card renders
+ * a "coming soon" pill and no links.
+ */
+export interface GameCopy {
   icon: string;
   title: string;
   /** The sentence under the title. */
   examples: string;
-  /** 'live' renders the CTA; 'soon' renders a "coming soon" pill instead. */
-  status: 'live' | 'soon';
-  /** Only read when status is 'live'. */
-  href?: string;
-  /** Only read when status is 'live'. */
-  cta?: string;
+  platforms: PlatformCopy[];
 }
 
 /**
- * A "here's a set of games" section: an eyebrow + title over a grid of
- * ServiceCards. `features` (Telegram + chessraiders.com) and `browserGames`
- * (the *.sneat.games game-kit family) both use this shape, so a new games
- * surface is a new field of this type, not a new bespoke section.
+ * The games section: an eyebrow + title over a grid of ServiceCards.
+ *
+ * There is exactly ONE of these (anchor `#games`). It used to be two — a
+ * Telegram section and a browser section — which listed Reversi twice, once per
+ * surface. Where a game is playable is a property OF THE GAME (see
+ * PlatformCopy), not a reason to split the page.
  */
-export interface FeatureSectionCopy {
+export interface GameSectionCopy {
   eyebrow: string;
   title: string;
   /** Optional paragraph under the title — shared context for every card below,
    * so individual card copy doesn't have to repeat it. */
   lede?: string;
-  items: FeatureCopy[];
+  items: GameCopy[];
 }
 
 /**
@@ -114,18 +145,30 @@ export interface Copy {
 
   howItWorks: { eyebrow: string; title: string; steps: StepCopy[] };
 
-  /** The games playable inside Telegram (plus chessraiders.com). */
-  features: FeatureSectionCopy;
-
-  /** The *.sneat.games browser games (game-kit family): live + coming-soon. */
-  browserGames: FeatureSectionCopy;
+  /** Every game, listed exactly once, with the places you can play it. */
+  games: GameSectionCopy;
 
   /**
-   * Localised labels for the ServiceCard status pill/CTA furniture, shared by
-   * every games section — a card's status is structural (live/soon), not
-   * per-item prose, so its wording lives here once instead of on every item.
+   * Localised labels for the ServiceCard pill/CTA furniture — a card's status
+   * and its surfaces are structural (live/soon, browser/telegram), not per-item
+   * prose, so their wording lives here once instead of on every item.
+   *
+   * Every user-visible word the card renders comes from here. Do not reintroduce
+   * an English literal into ServiceCard.astro: that is precisely how the status
+   * pills once shipped untranslated on the Russian page.
    */
-  cardLabels: { live: string; soon: string; roadmap: string };
+  cardLabels: {
+    /** Pill, when at least one platform is live. */
+    live: string;
+    /** Pill, when none is. */
+    soon: string;
+    /** Bottom-of-card note for a game with no announced surface at all. */
+    roadmap: string;
+    /** The CTA per live platform: "Play in browser" / "Play in Telegram". */
+    play: Record<PlatformKind, string>;
+    /** The note per 'soon' platform: "Coming to browser" / "Coming to Telegram". */
+    coming: Record<PlatformKind, string>;
+  };
 
   why: { eyebrow: string; title: string; tiles: { icon: string; title: string }[] };
 
