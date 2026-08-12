@@ -62,32 +62,63 @@ const home = localeHref(locale, "/");
   </div>
 </section>
 
-<!-- Games — ONE section, one card per game. A game with two homes (Reversi:
-     Telegram now, browser soon) lists both on its own card rather than
-     appearing once per surface, which is what the old split sections did. -->
-<section id="games" class="section soft">
-  <div class="container">
-    <div class="text-center section-head">
-      <p class="eyebrow">{copy.games.eyebrow}</p>
-      <h2>{copy.games.title}</h2>
-      {copy.games.lede && <p class="section-lede">{copy.games.lede}</p>}
-    </div>
+<!-- Games — TWO sections, still ONE card per game. The split is by authorship
+     (ours vs. the world's), never by surface: a game with two homes (Reversi:
+     Telegram and browser) lists both on its own single card, which is what
+     replaced the old per-surface sections.
 
-    <div class="grid grid-3 featured">
-      {
-        copy.games.items.map((g) => (
-          <ServiceCard
-            icon={g.icon}
-            title={g.title}
-            examples={g.examples}
-            platforms={g.platforms}
-            labels={copy.cardLabels}
-          />
-        ))
-      }
+     The wrapper carries `#games` because that anchor predates the split and is
+     linked from the hero, the CTA band, the footer and anywhere off-site: it
+     resolves to the top of the listing, i.e. the originals. -->
+<div id="games">
+  <section id="originals" class="section soft">
+    <div class="container">
+      <div class="text-center section-head">
+        <p class="eyebrow">{copy.originals.eyebrow}</p>
+        <h2>{copy.originals.title}</h2>
+        {copy.originals.lede && <p class="section-lede">{copy.originals.lede}</p>}
+      </div>
+
+      <div class="grid grid-2 featured originals">
+        {
+          copy.originals.items.map((g) => (
+            <ServiceCard
+              icon={g.icon}
+              title={g.title}
+              examples={g.examples}
+              platforms={g.platforms}
+              labels={copy.cardLabels}
+            />
+          ))
+        }
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section id="classics" class="section">
+    <div class="container">
+      <div class="text-center section-head">
+        <p class="eyebrow">{copy.classics.eyebrow}</p>
+        <h2>{copy.classics.title}</h2>
+        {copy.classics.lede && <p class="section-lede">{copy.classics.lede}</p>}
+      </div>
+
+      <div class="grid grid-3 featured">
+        {
+          copy.classics.items.map((g) => (
+            <ServiceCard
+              icon={g.icon}
+              title={g.title}
+              examples={g.examples}
+              platforms={g.platforms}
+              labels={copy.cardLabels}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>
 
 <!-- Why -->
 <section id="why" class="section">
@@ -172,6 +203,13 @@ const home = localeHref(locale, "/");
     align-items: stretch;
     max-width: 1000px;
     margin-inline: auto;
+  }
+
+  /* Two cards, not ten. Narrower than .featured so the pair reads as the
+     headline of the page rather than as a three-column row missing a third
+     card. Declared after .featured, which is what lets it win. */
+  .originals {
+    max-width: 700px;
   }
 
   .section-lede {

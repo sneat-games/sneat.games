@@ -74,12 +74,16 @@ export interface GameCopy {
 }
 
 /**
- * The games section: an eyebrow + title over a grid of ServiceCards.
+ * A games section: an eyebrow + title over a grid of ServiceCards.
  *
- * There is exactly ONE of these (anchor `#games`). It used to be two — a
- * Telegram section and a browser section — which listed Reversi twice, once per
- * surface. Where a game is playable is a property OF THE GAME (see
- * PlatformCopy), not a reason to split the page.
+ * There are exactly TWO of these — `originals` (#originals) and `classics`
+ * (#classics) — and the split is by WHO DESIGNED THE GAME, which is the one
+ * thing a visitor cannot work out from a card.
+ *
+ * It is NOT a split by surface. That was the old shape (a Telegram section and
+ * a browser section) and it listed Reversi twice, once per home. Where a game
+ * is playable is a property OF THE GAME (see PlatformCopy); a game still gets
+ * exactly one card, in exactly one of these two sections.
  */
 export interface GameSectionCopy {
   eyebrow: string;
@@ -145,8 +149,18 @@ export interface Copy {
 
   howItWorks: { eyebrow: string; title: string; steps: StepCopy[] };
 
-  /** Every game, listed exactly once, with the places you can play it. */
-  games: GameSectionCopy;
+  /**
+   * Games invented here — our own rules, not a rebuild of something older.
+   * Rendered first, as the headline of the page. Keep this list short: it is a
+   * claim about authorship, and every title added to it dilutes the others.
+   */
+  originals: GameSectionCopy;
+
+  /**
+   * Games the world already knows, rebuilt to play in seconds. A new classic
+   * goes here, not above.
+   */
+  classics: GameSectionCopy;
 
   /**
    * Localised labels for the ServiceCard pill/CTA furniture — a card's status
