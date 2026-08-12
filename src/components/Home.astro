@@ -80,6 +80,38 @@ const home = localeHref(locale, "/");
             status={f.status}
             href={f.href}
             cta={f.cta}
+            liveLabel={copy.cardLabels.live}
+            soonLabel={copy.cardLabels.soon}
+            roadmapLabel={copy.cardLabels.roadmap}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Browser games -->
+<section id="browser-games" class="section">
+  <div class="container">
+    <div class="text-center section-head">
+      <p class="eyebrow">{copy.browserGames.eyebrow}</p>
+      <h2>{copy.browserGames.title}</h2>
+      {copy.browserGames.lede && <p class="section-lede">{copy.browserGames.lede}</p>}
+    </div>
+
+    <div class="grid grid-3 featured">
+      {
+        copy.browserGames.items.map((f) => (
+          <ServiceCard
+            icon={f.icon}
+            title={f.title}
+            examples={f.examples}
+            status={f.status}
+            href={f.href}
+            cta={f.cta}
+            liveLabel={copy.cardLabels.live}
+            soonLabel={copy.cardLabels.soon}
+            roadmapLabel={copy.cardLabels.roadmap}
           />
         ))
       }
@@ -170,6 +202,11 @@ const home = localeHref(locale, "/");
     align-items: stretch;
     max-width: 1000px;
     margin-inline: auto;
+  }
+
+  .section-lede {
+    margin-top: var(--space-2);
+    margin-bottom: 0;
   }
 
   .why-tile {

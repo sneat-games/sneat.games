@@ -45,6 +45,21 @@ export interface FeatureCopy {
 }
 
 /**
+ * A "here's a set of games" section: an eyebrow + title over a grid of
+ * ServiceCards. `features` (Telegram + chessraiders.com) and `browserGames`
+ * (the *.sneat.games game-kit family) both use this shape, so a new games
+ * surface is a new field of this type, not a new bespoke section.
+ */
+export interface FeatureSectionCopy {
+  eyebrow: string;
+  title: string;
+  /** Optional paragraph under the title — shared context for every card below,
+   * so individual card copy doesn't have to repeat it. */
+  lede?: string;
+  items: FeatureCopy[];
+}
+
+/**
  * A plain legal page: /{locale}/privacy/ and /{locale}/terms/ share this shape
  * and render through the same component (Legal.astro).
  *
@@ -99,7 +114,18 @@ export interface Copy {
 
   howItWorks: { eyebrow: string; title: string; steps: StepCopy[] };
 
-  features: { eyebrow: string; title: string; items: FeatureCopy[] };
+  /** The games playable inside Telegram (plus chessraiders.com). */
+  features: FeatureSectionCopy;
+
+  /** The *.sneat.games browser games (game-kit family): live + coming-soon. */
+  browserGames: FeatureSectionCopy;
+
+  /**
+   * Localised labels for the ServiceCard status pill/CTA furniture, shared by
+   * every games section — a card's status is structural (live/soon), not
+   * per-item prose, so its wording lives here once instead of on every item.
+   */
+  cardLabels: { live: string; soon: string; roadmap: string };
 
   why: { eyebrow: string; title: string; tiles: { icon: string; title: string }[] };
 

@@ -6,10 +6,24 @@ interface Props {
   status?: "live" | "soon";
   href?: string;
   cta?: string;
+  /** Localised pill/CTA furniture — see Copy['cardLabels']. Defaults keep any
+   * caller that doesn't pass them working, in English. */
+  liveLabel?: string;
+  soonLabel?: string;
+  roadmapLabel?: string;
 }
 
-const { icon, title, examples, status = "soon", href, cta = "Get started" } =
-  Astro.props;
+const {
+  icon,
+  title,
+  examples,
+  status = "soon",
+  href,
+  cta = "Get started",
+  liveLabel = "Live now",
+  soonLabel = "Coming soon",
+  roadmapLabel = "On the roadmap",
+} = Astro.props;
 const isLive = status === "live";
 ---
 
@@ -17,7 +31,7 @@ const isLive = status === "live";
   <div class="top">
     <span class="icon" aria-hidden="true">{icon}</span>
     <span class={`pill ${isLive ? "pill-live" : "pill-soon"}`}>
-      {isLive ? "Live now" : "Coming soon"}
+      {isLive ? liveLabel : soonLabel}
     </span>
   </div>
   <h3>{title}</h3>
@@ -25,7 +39,7 @@ const isLive = status === "live";
   {isLive && href ? (
     <a class="btn btn-primary cta" href={href}>{cta} →</a>
   ) : (
-    <span class="cta-soon">On the roadmap</span>
+    <span class="cta-soon">{roadmapLabel}</span>
   )}
 </article>
 
