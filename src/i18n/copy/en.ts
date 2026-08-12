@@ -236,7 +236,7 @@ export const en: Copy = {
       },
       {
         title: 'Where you play',
-        body: 'What is described here is our own game sites — the ones linked from sneat.games. The same games are also published on portals such as CrazyGames and itch.io: play there and that portal’s privacy policy applies alongside this one, and its own code runs next to the game. On our sites that code never loads.',
+        body: 'This page describes our own game sites — the ones linked from sneat.games. The same games are also published on portals such as CrazyGames and itch.io: play there and that portal’s privacy policy applies alongside this one, and its own code runs next to the game. On our sites that code never loads.',
       },
       {
         title: 'Games in Telegram',
