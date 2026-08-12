@@ -40,7 +40,7 @@ export const en: Copy = {
     microcopy: '🎮 Chat or browser · 🤖 Bot or friends · 🆓 Free to play',
     seoTitle: 'Sneat Games — casual games in Telegram and your browser',
     seoDescription:
-      'Play Chess Raiders, Bidding Tic-Tac-Toe, Hex and Dots & Boxes free in your browser, or Reversi and Rock-Paper-Scissors inside Telegram — solo against a bot or head-to-head with a friend. No install, no account.',
+      'Play Chess Raiders, Bidding Tic-Tac-Toe, Hex, Dots & Boxes, Reversi, Four in a Row, Gomoku, Ultimate Tic-Tac-Toe, Domineering and Y free in your browser, or Reversi and Rock-Paper-Scissors inside Telegram — solo against a bot or head-to-head with a friend. No install, no account.',
   },
 
   nav: [
@@ -62,8 +62,8 @@ export const en: Copy = {
 
   games: {
     eyebrow: 'The games',
-    title: 'Six games to play right now',
-    lede: 'Play in your browser or right inside Telegram — no install, no account. Every browser game has a classic mode and a hidden-bid "bidding" mode: take on the computer, even offline, or send a friend a link. Six more games are on the way.',
+    title: 'Eleven games to play right now',
+    lede: 'Play in your browser or right inside Telegram — no install, no account. Every browser game has a classic mode and a hidden-bid "bidding" mode: take on the computer, even offline, or send a friend a link. Nine of them are new.',
     items: [
       {
         icon: '♞',
@@ -105,7 +105,7 @@ export const en: Copy = {
           'The classic disc-flipping strategy game. Pick your colour, play against an AI or a random opponent, and outflank the board to own the most discs.',
         platforms: [
           { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
-          { kind: 'browser', status: 'soon', href: 'https://reversi.sneat.games' },
+          { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
         ],
       },
       {
@@ -129,33 +129,33 @@ export const en: Copy = {
         title: 'Four in a Row',
         examples:
           'Drop your discs down the columns and line up four in a row before your opponent does.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://four-in-a-row.sneat.games' }],
       },
       {
         icon: '⚪',
         title: 'Gomoku',
         examples: 'Place stones on an open board — the first to five in a row wins.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://gomoku.sneat.games' }],
       },
       {
         icon: '🔳',
         title: 'Ultimate Tic-Tac-Toe',
         examples:
           'Nine boards in one: win a square to send your opponent into the matching board next.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://ultimate-tictactoe.sneat.games' }],
       },
       {
         icon: '🟧',
         title: 'Domineering',
         examples:
           "Place dominoes across the grid — yours run one way, your opponent's the other — until someone runs out of room.",
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://domineering.sneat.games' }],
       },
       {
         icon: '🔺',
         title: 'Y',
         examples: 'Claim territory on a triangular board — connect all three sides to win.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://y.sneat.games' }],
       },
     ],
   },
@@ -197,7 +197,9 @@ export const en: Copy = {
       { label: 'Bidding Tic-Tac-Toe', href: 'https://bidding-tictactoe.sneat.games' },
       { label: 'Hex', href: 'https://hex.sneat.games' },
       { label: 'Dots & Boxes', href: 'https://dots-and-boxes.sneat.games' },
-      { label: 'Reversi', href: 'https://t.me/SneatBot?start=reversi' },
+      { label: 'Reversi', href: 'https://reversi.sneat.games' },
+      { label: 'Four in a Row', href: 'https://four-in-a-row.sneat.games' },
+      { label: 'Gomoku', href: 'https://gomoku.sneat.games' },
       { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatBot?start=rps' },
       { label: 'All games', href: '#games' },
       { label: 'How it works', href: '#how-it-works' },

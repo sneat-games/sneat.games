@@ -34,7 +34,7 @@ export const ru: Copy = {
     microcopy: '🎮 В чате или в браузере · 🤖 Бот или друзья · 🆓 Бесплатно',
     seoTitle: 'Sneat Games — простые игры в Telegram и в браузере',
     seoDescription:
-      'Играйте в Chess Raiders, «Крестики-нолики с торгами», «Гекс» и «Точки и квадраты» прямо в браузере, а в «Реверси» и «Камень-ножницы-бумагу» — в Telegram. Против бота или с другом, без установки и без аккаунта.',
+      'Играйте в Chess Raiders, «Крестики-нолики с торгами», «Гекс», «Точки и квадраты», «Реверси», «Четыре в ряд», «Гомоку», «Ультимативные крестики-нолики», «Доминиринг» и «Игру Y» прямо в браузере, а в «Реверси» и «Камень-ножницы-бумагу» — ещё и в Telegram. Против бота или с другом, без установки и без аккаунта.',
   },
 
   nav: [
@@ -56,8 +56,8 @@ export const ru: Copy = {
 
   games: {
     eyebrow: 'Игры',
-    title: 'Шесть игр, в которые можно сыграть прямо сейчас',
-    lede: 'Играйте в браузере или прямо в Telegram — без установки и без аккаунта. В каждой браузерной игре есть классический режим и режим со скрытыми ставками — «торги»: сыграйте против компьютера, даже офлайн, или отправьте другу ссылку. Ещё шесть игр на подходе.',
+    title: 'Одиннадцать игр, в которые можно сыграть прямо сейчас',
+    lede: 'Играйте в браузере или прямо в Telegram — без установки и без аккаунта. В каждой браузерной игре есть классический режим и режим со скрытыми ставками — «торги»: сыграйте против компьютера, даже офлайн, или отправьте другу ссылку. Девять из них — новые.',
     items: [
       {
         icon: '♞',
@@ -99,7 +99,7 @@ export const ru: Copy = {
           'Классическая стратегия с переворотом фишек. Выберите цвет, играйте против ИИ или случайного соперника и захватите большинство фишек на доске.',
         platforms: [
           { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
-          { kind: 'browser', status: 'soon', href: 'https://reversi.sneat.games' },
+          { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
         ],
       },
       {
@@ -122,33 +122,33 @@ export const ru: Copy = {
         icon: '🔴',
         title: 'Четыре в ряд',
         examples: 'Бросайте фишки в столбцы и соберите четыре в ряд раньше соперника.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://four-in-a-row.sneat.games' }],
       },
       {
         icon: '⚪',
         title: 'Гомоку',
         examples: 'Ставьте камни на открытой доске — первым соберёте пять в ряд и победите.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://gomoku.sneat.games' }],
       },
       {
         icon: '🔳',
         title: 'Ультимативные крестики-нолики',
         examples:
           'Девять досок в одной: выигранная клетка отправляет соперника ходить в соответствующую доску.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://ultimate-tictactoe.sneat.games' }],
       },
       {
         icon: '🟧',
         title: 'Доминиринг',
         examples:
           'Кладите доминошки на сетку — вы вдоль, соперник поперёк — пока у кого-то не кончится место.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://domineering.sneat.games' }],
       },
       {
         icon: '🔺',
         title: 'Игра Y',
         examples: 'Занимайте поле на треугольной доске — соедините все три стороны и победите.',
-        platforms: [{ kind: 'browser', status: 'soon' }],
+        platforms: [{ kind: 'browser', status: 'live', href: 'https://y.sneat.games' }],
       },
     ],
   },
@@ -190,7 +190,9 @@ export const ru: Copy = {
       { label: 'Крестики-нолики с торгами', href: 'https://bidding-tictactoe.sneat.games' },
       { label: 'Гекс', href: 'https://hex.sneat.games' },
       { label: 'Точки и квадраты', href: 'https://dots-and-boxes.sneat.games' },
-      { label: 'Реверси', href: 'https://t.me/SneatBot?start=reversi' },
+      { label: 'Реверси', href: 'https://reversi.sneat.games' },
+      { label: 'Четыре в ряд', href: 'https://four-in-a-row.sneat.games' },
+      { label: 'Гомоку', href: 'https://gomoku.sneat.games' },
       { label: 'Камень-ножницы-бумага', href: 'https://t.me/SneatBot?start=rps' },
       { label: 'Все игры', href: '#games' },
       { label: 'Как это работает', href: '#how-it-works' },
