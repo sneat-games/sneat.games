@@ -16,7 +16,19 @@ export default [
     // Unanchored `**/.wrangler`, matching .gitignore: any worker dir gets its
     // own state dir full of generated bundles, and a root-anchored pattern
     // misses them (a lesson paid for in bidding-tictactoe).
-    ignores: ["dist", "node_modules", ".astro", "**/.wrangler"],
+    ignores: [
+      "dist",
+      "node_modules",
+      ".astro",
+      "**/.wrangler",
+      // Agent sessions create git worktrees here, each a FULL copy of this
+      // repo. Without this, eslint lints those copies as if they were our
+      // own source: it reports another session's (often stale) code as
+      // errors in this checkout, and the result changes depending on which
+      // agents happen to be running. .gitignore already excludes the path,
+      // but flat config does not consult .gitignore.
+      "**/.claude/**",
+    ],
   },
   js.configs.recommended,
   ...astro.configs.recommended,
