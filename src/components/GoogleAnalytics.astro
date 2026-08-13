@@ -42,10 +42,20 @@ const { id, privacyHref = "" } = Astro.props;
     if (localStorage.getItem("ga-consent") === "granted") {
       gtag("consent", "update", { analytics_storage: "granted" });
     }
-  } catch (e) {}
+  } catch {
+    // localStorage throws in private mode and when cookies are blocked.
+    // Swallowing leaves analytics_storage at its denied default, which is
+    // the privacy-safe outcome: unreadable consent is never assumed granted.
+  }
 
   function gaSetConsent(v) {
-    try { localStorage.setItem("ga-consent", v); } catch (e) {}
+    try {
+      localStorage.setItem("ga-consent", v);
+    } catch {
+      // Can't persist the choice (private mode / blocked cookies). The
+      // gtag update below still applies it for this page view; the visitor
+      // is simply asked again next time rather than being opted in silently.
+    }
     gtag("consent", "update", { analytics_storage: v });
     var b = document.getElementById("ga-consent-banner");
     if (b) b.remove();
@@ -76,11 +86,22 @@ const { id, privacyHref = "" } = Astro.props;
 
   // Show the banner only to EEA/UK visitors who have not chosen yet.
   (function () {
-    try { if (localStorage.getItem("ga-consent")) return; } catch (e) {}
+    try {
+      if (localStorage.getItem("ga-consent")) return;
+    } catch {
+      // Unreadable storage means we cannot tell whether they already chose,
+      // so fall through and ask. Showing the banner twice is the acceptable
+      // failure here; skipping it and tracking them is not.
+    }
     fetch("/cdn-cgi/trace").then(function (r) { return r.text(); }).then(function (t) {
       var m = /(?:^|\n)loc=([A-Z]{2})/.exec(t);
       if (m && GATED.indexOf(m[1]) !== -1) gaShowBanner();
-    }).catch(function () {});
+    }).catch(function () {
+      // The geo lookup failed, so we cannot tell whether this visitor is in
+      // the gated region and the banner stays hidden. Safe by construction:
+      // analytics_storage is denied until explicitly granted, so a visitor
+      // who never sees the banner is never tracked.
+    });
   })();
 </script>
 <style is:inline>
