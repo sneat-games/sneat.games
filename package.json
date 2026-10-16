@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
+    "test": "node --test scripts/games-lock.test.mjs",
     "games:bump": "node scripts/games-lock.mjs bump",
     "test:canary": "playwright test -c scripts/canary/playwright.config.mjs"
   },

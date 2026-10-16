@@ -48,7 +48,10 @@ The slug is the old host label: `reversi`, `greed`, `y`,
 - **Build:** `pnpm build` runs `astro build`, then
   `node scripts/games-lock.mjs install`. That step:
   - downloads each asset and **fails on a sha256 mismatch**
-  - extracts it into `dist/<slug>/`
+  - extracts it into `dist/<slug>/` with its own tar reader, which accepts **only
+    regular files and directories**: symlinks, hardlinks, devices, FIFOs and
+    `..`/absolute paths fail the build, and an lstat pass re-checks the result
+    (tests: `pnpm test`)
   - writes `dist/<slug>/404.html`, which sends deep links back to `/<slug>/`
   - fails if the deploy would exceed the Workers file-count or file-size limits
 - **Ship a new game build:** the game repo's CI publishes `web-<sha12>`

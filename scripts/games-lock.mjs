@@ -29,11 +29,17 @@
 // asset matches", so that rule would serve index.html for real JS/CSS files.
 // With `not_found_handling: "404-page"` the nearest 404.html answers misses
 // only, and the games route by `#fragment`, so the page simply goes home.
+//
+// Extraction never shells out to `tar`: a release asset is untrusted input,
+// and `tar -x` happily creates symlinks and hardlinks (e.g. `leak ->
+// /proc/self/environ`, which would publish the build's GH_TOKEN at
+// /<slug>/leak). The reader below accepts ONLY regular files and
+// directories, writes them itself with exclusive-create, and a second lstat
+// pass over the result refuses any non-regular file or nlink > 1.
 import { createHash } from "node:crypto";
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { dirname, join, relative, resolve } from "node:path";
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -43,7 +49,10 @@ const LOCK = process.env.GAMES_LOCK ? resolve(process.env.GAMES_LOCK) : join(roo
 const DIST = join(root, "dist");
 
 // Landing-owned top-level paths a game slug must never shadow.
-const RESERVED = new Set(["en", "ru", "_astro", "favicon.svg", "robots.txt", "sw.js", "__migrate.html", "__migrate", "404.html", "index.html"]);
+const RESERVED = new Set([
+  "en", "ru", "privacy", "terms", "_astro", "favicon.svg", "robots.txt", "sw.js", "__migrate.html", "__migrate",
+  "404.html", "index.html", "_redirects", "_headers", "sitemap-index.xml", "sitemap-0.xml",
+]);
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 const SHA_RE = /^[0-9a-f]{64}$/;
 // Workers Free static assets: 20,000 files per version, 25 MiB per file.
@@ -53,9 +62,10 @@ const MAX_FILE_BYTES = 24 * 1024 * 1024;
 
 const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
 
+class GamesLockError extends Error {}
+
 function die(msg) {
-  console.error(`games-lock: ${msg}`);
-  process.exit(1);
+  throw new GamesLockError(msg);
 }
 
 function readLock() {
@@ -104,25 +114,153 @@ async function download(g) {
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 
-function extract(buf, slug) {
-  const tmp = mkdtempSync(join(tmpdir(), `games-lock-${slug}-`));
-  try {
-    const tgz = join(tmp, "asset.tar.gz");
-    writeFileSync(tgz, buf);
-    // Refuse anything that could land outside dist/<slug>/.
-    const entries = execFileSync("tar", ["-tzf", tgz], { encoding: "utf8" }).split("\n").filter(Boolean);
-    for (const e of entries) {
-      if (e.startsWith("/") || e.split("/").includes("..")) die(`${slug}: unsafe path in tarball: ${e}`);
-    }
-    if (!entries.some((e) => e.replace(/^\.\//, "") === "index.html")) die(`${slug}: tarball has no index.html`);
-    const out = join(DIST, slug);
-    if (existsSync(out)) die(`${slug}: dist/${slug} already exists — the landing build owns that path`);
-    mkdirSync(out, { recursive: true });
-    execFileSync("tar", ["-xzf", tgz, "-C", out, "--no-same-owner"]);
-    return out;
-  } finally {
-    rmSync(tmp, { recursive: true, force: true });
+function octal(field) {
+  const str = field.toString("latin1").replace(/\0.*$/s, "").trim();
+  if (str === "") return 0;
+  if (!/^[0-7]+$/.test(str)) die(`tar: bad numeric field ${JSON.stringify(str)}`);
+  return parseInt(str, 8);
+}
+
+function cstr(field) {
+  return field.toString("utf8").replace(/\0.*$/s, "");
+}
+
+function parsePax(body) {
+  const out = {};
+  let i = 0;
+  const text = body.toString("utf8");
+  while (i < text.length) {
+    const sp = text.indexOf(" ", i);
+    if (sp < 0) break;
+    const len = parseInt(text.slice(i, sp), 10);
+    if (!(len > 0)) die("tar: malformed pax header");
+    const rec = text.slice(sp + 1, i + len - 1); // drop trailing \n
+    const eq = rec.indexOf("=");
+    if (eq > 0) out[rec.slice(0, eq)] = rec.slice(eq + 1);
+    i += len;
   }
+  return out;
+}
+
+/**
+ * Parse an uncompressed ustar/pax/GNU tar into `{ name, kind, body }`
+ * entries, kind "file" or "dir". ANY other entry type — symlink (2),
+ * hardlink (1), char/block device (3/4), FIFO (6), GNU long link (K), ... —
+ * is refused, as is a pax/GNU record that would set a link target.
+ */
+export function readTar(tar) {
+  const entries = [];
+  let off = 0;
+  let pax = {};
+  let longName = null;
+  while (off + 512 <= tar.length) {
+    const h = tar.subarray(off, off + 512);
+    if (h.every((b) => b === 0)) return entries;
+    let sum = 0;
+    for (let i = 0; i < 512; i++) sum += i >= 148 && i < 156 ? 32 : h[i];
+    if (sum !== octal(h.subarray(148, 156))) die(`tar: header checksum mismatch at offset ${off}`);
+    if (h[124] & 0x80) die("tar: base-256 sizes are not supported");
+    const size = octal(h.subarray(124, 136));
+    const type = h[156] === 0 ? "0" : String.fromCharCode(h[156]);
+    let name = cstr(h.subarray(0, 100));
+    const prefix = cstr(h.subarray(257, 263)).startsWith("ustar") ? cstr(h.subarray(345, 500)) : "";
+    if (prefix) name = `${prefix}/${name}`;
+    const start = off + 512;
+    if (start + size > tar.length) die(`tar: truncated entry ${JSON.stringify(name)}`);
+    const body = tar.subarray(start, start + size);
+    off = start + Math.ceil(size / 512) * 512;
+
+    if (type === "x" || type === "g") {
+      const rec = parsePax(body);
+      if ("linkpath" in rec) die(`tar: pax linkpath refused (${JSON.stringify(rec.linkpath)})`);
+      if (type === "x") pax = rec; // global ('g') records only carry metadata we ignore
+      continue;
+    }
+    if (type === "L") {
+      longName = cstr(body);
+      continue;
+    }
+    if (typeof pax.path === "string") name = pax.path;
+    if (longName !== null) name = longName;
+    pax = {};
+    longName = null;
+
+    if (type === "0" || type === "7") entries.push({ name, kind: "file", body });
+    else if (type === "5") entries.push({ name, kind: "dir", body: null });
+    else die(`tar: refusing entry ${JSON.stringify(name)} of type '${type}' (only regular files and directories are allowed)`);
+  }
+  die("tar: missing end-of-archive marker");
+}
+
+/** Normalise an entry name to path segments under the target, or throw. */
+function safeSegments(name) {
+  if (name.includes("\0") || name.includes("\\")) die(`unsafe path in tarball: ${JSON.stringify(name)}`);
+  if (name.startsWith("/")) die(`unsafe path in tarball: ${JSON.stringify(name)}`);
+  const segs = name.split("/").filter((x) => x !== "" && x !== ".");
+  if (segs.includes("..")) die(`unsafe path in tarball: ${JSON.stringify(name)}`);
+  return segs;
+}
+
+/**
+ * Fail unless every entry under `dir` is a real directory or a regular file
+ * with exactly one link. Uses lstat, so a symlink is seen as a symlink.
+ */
+export function verifyTree(dir) {
+  const files = [];
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    const st = lstatSync(p);
+    if (st.isDirectory()) files.push(...verifyTree(p));
+    else if (st.isFile() && st.nlink === 1) files.push(p);
+    else die(`refusing ${p}: not a regular file or directory, or hard-linked (nlink=${st.nlink})`);
+  }
+  return files;
+}
+
+// A game bundle must be relative: a root-absolute /_astro/ reference in its
+// JS or CSS would load the LANDING's assets (or 404) under /<slug>/.
+const ROOT_ABSOLUTE_ASSET = /(["'`(]\s*)\/_astro\//;
+
+/**
+ * Extract a game's .tar.gz into `<distDir>/<slug>/`. Only regular files and
+ * directories are written; nothing is written outside the target.
+ */
+export function extract(buf, slug, distDir = DIST) {
+  let tar;
+  try {
+    tar = gunzipSync(buf);
+  } catch (e) {
+    die(`${slug}: asset is not gzip: ${e.message}`);
+  }
+  const entries = readTar(tar);
+  if (!entries.some((e) => e.kind === "file" && safeSegments(e.name).join("/") === "index.html")) {
+    die(`${slug}: tarball has no index.html`);
+  }
+  const out = join(distDir, slug);
+  if (existsSync(out)) die(`${slug}: dist/${slug} already exists — the landing build owns that path`);
+  mkdirSync(out, { recursive: true });
+  for (const e of entries) {
+    const segs = safeSegments(e.name);
+    if (segs.length === 0) continue; // the "./" root entry
+    // macOS tar stores extended attributes as AppleDouble "._<name>" files;
+    // they are metadata, not part of the bundle.
+    if (segs[segs.length - 1].startsWith("._")) continue;
+    const dest = join(out, ...segs);
+    const rel = relative(out, dest);
+    if (rel === "" || rel === ".." || rel.startsWith(`..${sep}`) || isAbsolute(rel)) die(`${slug}: unsafe path in tarball: ${e.name}`);
+    if (e.kind === "dir") {
+      mkdirSync(dest, { recursive: true });
+    } else {
+      mkdirSync(dirname(dest), { recursive: true });
+      // 'wx': never follow or overwrite something already there.
+      writeFileSync(dest, e.body, { flag: "wx", mode: 0o644 });
+      if (/\.(m?js|css)$/.test(dest) && ROOT_ABSOLUTE_ASSET.test(e.body.toString("utf8"))) {
+        die(`${slug}: ${segs.join("/")} references a root-absolute /_astro/ URL — build with sneat-relativize-dist`);
+      }
+    }
+  }
+  verifyTree(out);
+  return out;
 }
 
 function notFoundPage(slug) {
@@ -135,18 +273,13 @@ function notFoundPage(slug) {
 `;
 }
 
-function walk(dir) {
-  return readdirSync(dir).flatMap((name) => {
-    const p = join(dir, name);
-    return statSync(p).isDirectory() ? walk(p) : [p];
-  });
-}
-
 function guardLimits() {
-  const files = walk(DIST);
+  // verifyTree uses lstat: a symlink anywhere in dist/ fails the build
+  // instead of being followed (and its target uploaded).
+  const files = verifyTree(DIST);
   if (files.length > MAX_FILES) die(`dist has ${files.length} files (> ${MAX_FILES}; Workers limit is 20,000)`);
   for (const f of files) {
-    const size = statSync(f).size;
+    const size = lstatSync(f).size;
     if (size > MAX_FILE_BYTES) die(`${relative(DIST, f)} is ${size} bytes (> 24 MiB; Workers limit is 25 MiB)`);
   }
   console.log(`games-lock: dist has ${files.length} files, all under 24 MiB`);
@@ -191,7 +324,17 @@ async function bump(slug, version) {
   console.log(`games-lock: ${slug} -> ${version} (${g.sha256})`);
 }
 
-const [cmd, ...args] = process.argv.slice(2);
-if (cmd === "install") await install();
-else if (cmd === "bump") await bump(...args);
-else die("usage: games-lock.mjs install | bump <slug> <tag>");
+async function main() {
+  const [cmd, ...args] = process.argv.slice(2);
+  if (cmd === "install") await install();
+  else if (cmd === "bump") await bump(...args);
+  else die("usage: games-lock.mjs install | bump <slug> <tag>");
+}
+
+// Run only as a script, so the test file can import the helpers above.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => {
+    console.error(`games-lock: ${e instanceof GamesLockError ? e.message : e.stack}`);
+    process.exit(1);
+  });
+}

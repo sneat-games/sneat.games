@@ -1,0 +1,36 @@
+name: CI
+
+# PR gate for the landing: lint, the games-lock extractor tests, and the
+# full build (which downloads and verifies every pinned game asset). Deploy
+# stays in deploy.yml (push to main). Same pnpm/Node setup as cf-deploy.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup pnpm + Node
+        uses: sneat-co/cicd/actions/setup-pnpm-node@main
+        with:
+          working-directory: .
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test (games-lock extractor)
+        run: pnpm test
+
+      - name: Build (verifies pinned game assets)
+        env:
+          # Public game repos only; see deploy.yml for private ones.
+          GH_TOKEN: ${{ github.token }}
+        run: pnpm build
