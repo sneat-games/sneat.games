@@ -28,6 +28,15 @@ jobs:
       # repo variable is unset it falls back to the https://sneat.games default
       # baked into astro.config.mjs.
       build-command: PUBLIC_SITE_URL='${{ vars.PUBLIC_SITE_URL }}' pnpm build
+      # The build downloads each game's pinned release asset
+      # (scripts/games-lock.mjs). This exposes the job's own GITHUB_TOKEN to
+      # it as GH_TOKEN, which is enough for PUBLIC game repos. Once a
+      # private game is pinned, switch to the repository-scoped App token:
+      #   build-github-app-client-id: <client id of the releaser App>
+      #   build-github-app-owner: sneat-games
+      #   build-github-app-repositories: <comma-separated private game repos>
+      # plus secrets.BUILD_GITHUB_APP_PRIVATE_KEY (see README "Games").
+      build-github-auth: true
       wrangler-config: wrangler.jsonc
       cloudflare-account-id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     secrets:

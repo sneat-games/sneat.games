@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && node scripts/games-lock.mjs install",
     "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "games:bump": "node scripts/games-lock.mjs bump",
+    "test:canary": "playwright test -c scripts/canary/playwright.config.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.62.1",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
     "eslint": "^10.8.1",
