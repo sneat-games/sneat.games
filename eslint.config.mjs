@@ -28,6 +28,8 @@ export default [
       // agents happen to be running. .gitignore already excludes the path,
       // but flat config does not consult .gitignore.
       "**/.claude/**",
+      "test-results",
+      "playwright-report",
     ],
   },
   js.configs.recommended,
@@ -55,12 +57,26 @@ export default [
     },
   },
   {
-    // worker.js is the Cloudflare entry point: plain JS, Workers runtime.
-    files: ["worker.js"],
+    // Build scripts: plain Node ESM.
+    files: ["scripts/**/*.mjs"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
-      globals: { ...globals.browser, ...globals.node },
+      globals: { ...globals.node },
+    },
+  },
+  {
+    // The canary spec runs callbacks in the page via page.evaluate().
+    files: ["scripts/canary/**/*.mjs"],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
+    // The root kill-switch service worker (served as-is from public/).
+    files: ["public/sw.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "script",
+      globals: { ...globals.serviceworker },
     },
   },
 ];
