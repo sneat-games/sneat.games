@@ -25,6 +25,7 @@
   // added here as custom domains too, so they serve the /sw.js kill switch
   // and /__migrate.html. Not yet: see docs/cloudflare-cutover.md.
   "routes": [
-    { "pattern": "sneat.games", "custom_domain": true }
+    { "pattern": "sneat.games", "custom_domain": true },
+    { "pattern": "reversi.sneat.games", "custom_domain": true }
   ]
 }
