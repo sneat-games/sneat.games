@@ -29,8 +29,18 @@ jobs:
       - name: Test (games-lock extractor)
         run: pnpm test
 
+      # Same App token as deploy.yml (cf-deploy's build-github-app-*): the
+      # build downloads release assets of the 7 PRIVATE game repos.
+      - name: GitHub App token for the private game repos
+        id: app_token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: Iv23li26w131Kv6u3IdM
+          private-key: ${{ secrets.SNEAT_RELEASER_PRIVATE_KEY }}
+          owner: sneat-games
+          repositories: dots-and-boxes,domineering,four-in-a-row,gomoku,hex,ultimate-tictactoe,y-game
+
       - name: Build (verifies pinned game assets)
         env:
-          # Public game repos only; see deploy.yml for private ones.
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
         run: pnpm build

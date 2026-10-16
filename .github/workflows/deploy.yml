@@ -29,15 +29,17 @@ jobs:
       # baked into astro.config.mjs.
       build-command: PUBLIC_SITE_URL='${{ vars.PUBLIC_SITE_URL }}' pnpm build
       # The build downloads each game's pinned release asset
-      # (scripts/games-lock.mjs). This exposes the job's own GITHUB_TOKEN to
-      # it as GH_TOKEN, which is enough for PUBLIC game repos. Once a
-      # private game is pinned, switch to the repository-scoped App token:
-      #   build-github-app-client-id: <client id of the releaser App>
-      #   build-github-app-owner: sneat-games
-      #   build-github-app-repositories: <comma-separated private game repos>
-      # plus secrets.BUILD_GITHUB_APP_PRIVATE_KEY (see README "Games").
-      build-github-auth: true
+      # (scripts/games-lock.mjs) with GH_TOKEN. 7 game repos are PRIVATE, so
+      # the job's own GITHUB_TOKEN is not enough: cf-deploy mints a token of
+      # the sneat-releaser GitHub App (owner sneat-dev, also used by
+      # datatug/datatug-apps), scoped to exactly the private game repos.
+      # Needs: the App installed on the sneat-games org with Contents: read on
+      # these repos, and the org secret SNEAT_RELEASER_PRIVATE_KEY.
+      build-github-app-client-id: Iv23li26w131Kv6u3IdM
+      build-github-app-owner: sneat-games
+      build-github-app-repositories: dots-and-boxes,domineering,four-in-a-row,gomoku,hex,ultimate-tictactoe,y-game
       wrangler-config: wrangler.jsonc
       cloudflare-account-id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     secrets:
+      BUILD_GITHUB_APP_PRIVATE_KEY: ${{ secrets.SNEAT_RELEASER_PRIVATE_KEY }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
