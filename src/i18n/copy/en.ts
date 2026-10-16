@@ -24,7 +24,8 @@
  * href: 'https://t.me/GreedGameBot?start=play' } when @GreedGameBot ships, and
  * claim nothing about Telegram until then.
  *
- * The browser builds are the *.sneat.games game-kit family — see
+ * The browser builds are the game-kit family, served at /<slug>/ on this site
+ * (games.lock.json) — see
  * game-kit/docs/DESIGN.md.
  *
  * Counts live in prose too: `classics.title` counts the classics, the ledes
@@ -87,7 +88,7 @@ export const en: Copy = {
         title: 'The Greed Game',
         examples:
           'A hidden-bid duel of nerve. The bolder bid takes the round — but bid more than twice what your opponent bid and greed loses it for you. The whole game is deciding how far to push.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://greed.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/greed/' }],
       },
     ],
   },
@@ -103,7 +104,7 @@ export const en: Copy = {
         examples:
           'Classic 3-in-a-row, plus a bidding mode where you can outbid your opponent for the square you both want.',
         platforms: [
-          { kind: 'browser', status: 'live', href: 'https://bidding-tictactoe.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/bidding-tictactoe/' },
         ],
       },
       {
@@ -111,7 +112,7 @@ export const en: Copy = {
         title: 'Hex',
         examples:
           'Connect your two sides of the board with an unbroken chain before your opponent connects theirs.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://hex.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/hex/' }],
       },
       {
         icon: '🔲',
@@ -119,7 +120,7 @@ export const en: Copy = {
         examples:
           'Draw an edge, complete a box and go again — or bid for the right to choose who plays next.',
         platforms: [
-          { kind: 'browser', status: 'live', href: 'https://dots-and-boxes.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/dots-and-boxes/' },
         ],
       },
       {
@@ -130,7 +131,7 @@ export const en: Copy = {
           'The classic disc-flipping strategy game. Pick your colour, play against an AI or a random opponent, and outflank the board to own the most discs.',
         platforms: [
           { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
-          { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/reversi/' },
         ],
       },
       {
@@ -145,33 +146,33 @@ export const en: Copy = {
         title: 'Four in a Row',
         examples:
           'Drop your discs down the columns and line up four in a row before your opponent does.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://four-in-a-row.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/four-in-a-row/' }],
       },
       {
         icon: '⚪',
         title: 'Gomoku',
         examples: 'Place stones on an open board — the first to five in a row wins.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://gomoku.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/gomoku/' }],
       },
       {
         icon: '🔳',
         title: 'Ultimate Tic-Tac-Toe',
         examples:
           'Nine boards in one: win a square to send your opponent into the matching board next.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://ultimate-tictactoe.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/ultimate-tictactoe/' }],
       },
       {
         icon: '🟧',
         title: 'Domineering',
         examples:
           "Place dominoes across the grid — yours run one way, your opponent's the other — until someone runs out of room.",
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://domineering.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/domineering/' }],
       },
       {
         icon: '🔺',
         title: 'Y',
         examples: 'Claim territory on a triangular board — connect all three sides to win.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://y.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/y/' }],
       },
     ],
   },
@@ -210,17 +211,17 @@ export const en: Copy = {
     // then the classics: a footer link that isn't playable yet is a dead end.
     product: [
       { label: 'Chess Raiders', href: 'https://chessraiders.com' },
-      { label: 'The Greed Game', href: 'https://greed.sneat.games' },
-      { label: 'Bidding Tic-Tac-Toe', href: 'https://bidding-tictactoe.sneat.games' },
-      { label: 'Hex', href: 'https://hex.sneat.games' },
-      { label: 'Dots & Boxes', href: 'https://dots-and-boxes.sneat.games' },
-      { label: 'Reversi', href: 'https://reversi.sneat.games' },
+      { label: 'The Greed Game', href: '/greed/' },
+      { label: 'Bidding Tic-Tac-Toe', href: '/bidding-tictactoe/' },
+      { label: 'Hex', href: '/hex/' },
+      { label: 'Dots & Boxes', href: '/dots-and-boxes/' },
+      { label: 'Reversi', href: '/reversi/' },
       { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatBot?start=rps' },
-      { label: 'Four in a Row', href: 'https://four-in-a-row.sneat.games' },
-      { label: 'Gomoku', href: 'https://gomoku.sneat.games' },
-      { label: 'Ultimate Tic-Tac-Toe', href: 'https://ultimate-tictactoe.sneat.games' },
-      { label: 'Domineering', href: 'https://domineering.sneat.games' },
-      { label: 'Y', href: 'https://y.sneat.games' },
+      { label: 'Four in a Row', href: '/four-in-a-row/' },
+      { label: 'Gomoku', href: '/gomoku/' },
+      { label: 'Ultimate Tic-Tac-Toe', href: '/ultimate-tictactoe/' },
+      { label: 'Domineering', href: '/domineering/' },
+      { label: 'Y', href: '/y/' },
       { label: 'All games', href: '#games' },
       { label: 'How it works', href: '#how-it-works' },
     ],

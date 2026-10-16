@@ -17,16 +17,21 @@ listing both, rather than the two cards in two sections it used to be.
 | Game | Browser | Telegram |
 |---|---|---|
 | Chess Raiders | [chessraiders.com](https://chessraiders.com) | — |
-| Bidding Tic-Tac-Toe | `bidding-tictactoe.sneat.games` | — |
-| Hex | `hex.sneat.games` | — |
-| Dots & Boxes | `dots-and-boxes.sneat.games` | — |
-| Reversi | `reversi.sneat.games` *(soon)* | `t.me/SneatBot?start=reversi` |
+| The Greed Game | `/greed/` | @GreedGameBot *(soon)* |
+| Bidding Tic-Tac-Toe | `/bidding-tictactoe/` | — |
+| Hex | `/hex/` | — |
+| Dots & Boxes | `/dots-and-boxes/` | — |
+| Reversi | `/reversi/` | `t.me/SneatBot?start=reversi` |
 | Rock-Paper-Scissors | — | `t.me/SneatBot?start=rps` |
-| The Greed Game | — | @GreedGameBot *(soon)* |
-| Four in a Row, Gomoku, Ultimate Tic-Tac-Toe, Domineering, Y | *(soon)* | — |
+| Four in a Row | `/four-in-a-row/` | — |
+| Gomoku | `/gomoku/` | — |
+| Ultimate Tic-Tac-Toe | `/ultimate-tictactoe/` | — |
+| Domineering | `/domineering/` | — |
+| Y | `/y/` | — |
 
-The `?start=<payload>` deep links rely on SneatBot routing the `/start` payload
-straight into the game. The browser games are the `*.sneat.games` game-kit
+Browser paths are on this site (`https://sneat.games/<slug>/`), from
+`games.lock.json` (see "Games under `/<slug>/`" below). The `?start=<payload>` deep links rely on SneatBot routing the `/start` payload
+straight into the game. The browser games are the game-kit
 family (see `game-kit/docs/DESIGN.md`).
 
 **Shipping a game** is a one-line edit in `src/i18n/copy/{en,ru}.ts`: flip that
@@ -59,13 +64,13 @@ The slug is the old host label: `reversi`, `greed`, `y`,
   `GH_TOKEN=$(gh auth token) pnpm games:bump <slug> web-<sha12>`. For a slug
   that is not in the lock yet, prefix it with `GAME_REPO=sneat-games/<repo>`.
   Open a PR. Merging it deploys.
-- **Tokens:**
-  - CI downloads with the deploy job's own token (`build-github-auth: true` in
-    `deploy.yml`). That is enough for public game repos.
-  - The 7 private game repos need cf-deploy's repository-scoped GitHub App token
-    instead (`build-github-app-*` inputs plus `BUILD_GITHUB_APP_PRIVATE_KEY`,
-    the same path as datatug-apps). The App must be installed on the
-    sneat-games org with read access to those repos.
+- **Tokens:** 7 game repos are private (dots-and-boxes, domineering,
+  four-in-a-row, gomoku, hex, ultimate-tictactoe, y-game). CI (`ci.yml`) and
+  deploy (`deploy.yml`, cf-deploy's `build-github-app-*` inputs) download with
+  a token of the **sneat-releaser** GitHub App (client id
+  `Iv23li26w131Kv6u3IdM`, the same App datatug-apps uses), scoped to those
+  repos. It needs the App installed on the sneat-games org with
+  Contents: read on them, and the org secret `SNEAT_RELEASER_PRIVATE_KEY`.
 - **Routing:** there is no splat rewrite for a game directory. It would serve
   `index.html` for real JS and CSS files. Deep links rely on
   `not_found_handling: "404-page"` and the generated `404.html`. A request for

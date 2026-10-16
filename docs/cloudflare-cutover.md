@@ -1,4 +1,4 @@
-# Cloudflare cutover: retiring `<game>.sneat.games` (canary: reversi)
+# Cloudflare cutover: retiring `<game>.sneat.games` (canary: reversi, then wave 2)
 
 Nothing in this file runs on merge. Merging this repo only deploys the
 assets-only `sneat-games` Worker on `sneat.games` (see
@@ -107,13 +107,64 @@ RULESET_ID=$(api "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/ruleset
 api -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/rulesets/$RULESET_ID/rules" --data @rule.json
 ```
 
-To roll out the other 9, edit that rule (`PATCH .../rules/$RULE_ID`) and grow the host set to:
+## 3b. Wave 2: the other 9 hosts
+
+Reversi (the canary) is done: `reversi.sneat.games` is a custom domain of
+`sneat-games` and the rule above 302s it. For the other 9, run this only
+**after** their `web-<sha12>` releases are pinned in `games.lock.json` and
+deployed, so every `https://sneat.games/<slug>/` already serves the game
+(check each: `curl -sI https://sneat.games/<slug>/ | head -1` → 200).
+
+| Host | Slug | Old Worker (delete after the move) |
+|---|---|---|
+| `bidding-tictactoe.sneat.games` | `bidding-tictactoe` | `bidding-tictactoe-game` |
+| `dots-and-boxes.sneat.games` | `dots-and-boxes` | `dots-and-boxes-game` |
+| `domineering.sneat.games` | `domineering` | `domineering-game` |
+| `four-in-a-row.sneat.games` | `four-in-a-row` | `four-in-a-row-game` |
+| `gomoku.sneat.games` | `gomoku` | `gomoku-game` |
+| `greed.sneat.games` | `greed` | `greed-game` |
+| `hex.sneat.games` | `hex` | `hex-game` |
+| `ultimate-tictactoe.sneat.games` | `ultimate-tictactoe` | `ultimate-tictactoe-game` |
+| `y.sneat.games` | `y` | `y-game` |
+
+Never in this set: `webrtc.sneat.games` (`sneat-webrtc-relay`) and
+`signal.bidding-tictactoe.sneat.games` (`bidding-tictactoe-signaling`).
+
+For each host, one at a time: run step 2 with `HOST=<host>` (detach from the
+old Worker, attach to `sneat-games`), then immediately grow the rule's host
+set (step 3 rule, `PATCH .../rules/$RULE_ID` with the full body) to include
+it. When all 9 are moved the expression is:
 
 ```
-{"bidding-tictactoe.sneat.games" "dots-and-boxes.sneat.games" "domineering.sneat.games"
+(http.host in {"bidding-tictactoe.sneat.games" "dots-and-boxes.sneat.games" "domineering.sneat.games"
  "four-in-a-row.sneat.games" "gomoku.sneat.games" "greed.sneat.games" "hex.sneat.games"
  "reversi.sneat.games" "ultimate-tictactoe.sneat.games" "y.sneat.games"}
+ and not http.request.uri.path in {"/sw.js" "/__migrate" "/__migrate.html"})
 ```
+
+```sh
+RULESET_ID=$(api "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/rulesets/phases/http_request_dynamic_redirect/entrypoint" | jq -r '.result.id')
+RULE_ID=$(api "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/rulesets/$RULESET_ID" \
+  | jq -r '.result.rules[] | select(.description | startswith("Retired game hosts")) | .id')
+api -X PATCH "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/rulesets/$RULESET_ID/rules/$RULE_ID" --data @rule.json
+```
+
+Then, in one PR, add the 9 hosts to `routes` in `wrangler.jsonc` (same shape
+as the reversi entry) so the next deploy keeps them. Do not add them before
+the move: a deploy would try to attach a hostname another Worker still holds.
+
+Run the step 4 checks for each host (`HOST=<host>`, expected Location
+`https://sneat.games/<slug>/`). After a week of clean metrics: switch the rule
+to 301 and delete the 9 old Workers (9 Worker slots back):
+
+```sh
+for w in bidding-tictactoe-game dots-and-boxes-game domineering-game four-in-a-row-game \
+         gomoku-game greed-game hex-game ultimate-tictactoe-game y-game; do
+  api -X DELETE "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/workers/scripts/$w"
+done
+```
+
+Not executed yet, like everything above.
 
 ## 4. Canary checks (production, after steps 2 and 3)
 

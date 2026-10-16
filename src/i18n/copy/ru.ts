@@ -22,7 +22,8 @@
  * запись про Telegram появится, когда запустится @GreedGameBot, — до тех пор
  * про Telegram не обещаем ничего.
  *
- * Браузерные сборки — семейство *.sneat.games на game-kit,
+ * Браузерные сборки — семейство game-kit, на этом сайте по адресу /<slug>/
+ * (games.lock.json),
  * см. game-kit/docs/DESIGN.md.
  *
  * Числа тоже часть текста: в `classics.title` — сколько классических игр,
@@ -85,7 +86,7 @@ export const ru: Copy = {
         title: 'Greed Game',
         examples:
           'Дуэль на нервах со скрытыми ставками: раунд берёт та ставка, что смелее. Но поставьте больше чем вдвое от ставки соперника — и жадность отнимет у вас победу. Вся игра в том, как далеко вы решитесь зайти.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://greed.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/greed/' }],
       },
     ],
   },
@@ -101,14 +102,14 @@ export const ru: Copy = {
         examples:
           'Классические крестики-нолики — но за нужную клетку можно поторговаться с соперником: кто больше поставит, тот и ходит.',
         platforms: [
-          { kind: 'browser', status: 'live', href: 'https://bidding-tictactoe.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/bidding-tictactoe/' },
         ],
       },
       {
         icon: '⬡',
         title: 'Гекс',
         examples: 'Соедините свои два края доски сплошной цепочкой раньше соперника.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://hex.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/hex/' }],
       },
       {
         icon: '🔲',
@@ -116,7 +117,7 @@ export const ru: Copy = {
         examples:
           'Проведите линию, замкните квадрат — и ходите ещё раз. Или поставьте на торгах за право выбрать, кто ходит следующим.',
         platforms: [
-          { kind: 'browser', status: 'live', href: 'https://dots-and-boxes.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/dots-and-boxes/' },
         ],
       },
       {
@@ -128,7 +129,7 @@ export const ru: Copy = {
           'Классическая стратегия с переворотом фишек. Выберите цвет, играйте против ИИ или случайного соперника и захватите большинство фишек на доске.',
         platforms: [
           { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
-          { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
+          { kind: 'browser', status: 'live', href: '/reversi/' },
         ],
       },
       {
@@ -142,33 +143,33 @@ export const ru: Copy = {
         icon: '🔴',
         title: 'Четыре в ряд',
         examples: 'Бросайте фишки в столбцы и соберите четыре в ряд раньше соперника.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://four-in-a-row.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/four-in-a-row/' }],
       },
       {
         icon: '⚪',
         title: 'Гомоку',
         examples: 'Ставьте камни на открытой доске — первым соберёте пять в ряд и победите.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://gomoku.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/gomoku/' }],
       },
       {
         icon: '🔳',
         title: 'Ультимативные крестики-нолики',
         examples:
           'Девять досок в одной: выигранная клетка отправляет соперника ходить в соответствующую доску.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://ultimate-tictactoe.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/ultimate-tictactoe/' }],
       },
       {
         icon: '🟧',
         title: 'Доминиринг',
         examples:
           'Кладите доминошки на сетку — вы вдоль, соперник поперёк — пока у кого-то не кончится место.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://domineering.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/domineering/' }],
       },
       {
         icon: '🔺',
         title: 'Игра Y',
         examples: 'Занимайте поле на треугольной доске — соедините все три стороны и победите.',
-        platforms: [{ kind: 'browser', status: 'live', href: 'https://y.sneat.games' }],
+        platforms: [{ kind: 'browser', status: 'live', href: '/y/' }],
       },
     ],
   },
@@ -207,17 +208,17 @@ export const ru: Copy = {
     // наши, потом классика. Ссылка на то, во что ещё нельзя сыграть, — тупик.
     product: [
       { label: 'Chess Raiders', href: 'https://chessraiders.com/ru/' },
-      { label: 'Greed Game', href: 'https://greed.sneat.games' },
-      { label: 'Крестики-нолики с торгами', href: 'https://bidding-tictactoe.sneat.games' },
-      { label: 'Гекс', href: 'https://hex.sneat.games' },
-      { label: 'Точки и квадраты', href: 'https://dots-and-boxes.sneat.games' },
-      { label: 'Реверси', href: 'https://reversi.sneat.games' },
+      { label: 'Greed Game', href: '/greed/' },
+      { label: 'Крестики-нолики с торгами', href: '/bidding-tictactoe/' },
+      { label: 'Гекс', href: '/hex/' },
+      { label: 'Точки и квадраты', href: '/dots-and-boxes/' },
+      { label: 'Реверси', href: '/reversi/' },
       { label: 'Камень-ножницы-бумага', href: 'https://t.me/SneatBot?start=rps' },
-      { label: 'Четыре в ряд', href: 'https://four-in-a-row.sneat.games' },
-      { label: 'Гомоку', href: 'https://gomoku.sneat.games' },
-      { label: 'Ультимативные крестики-нолики', href: 'https://ultimate-tictactoe.sneat.games' },
-      { label: 'Доминиринг', href: 'https://domineering.sneat.games' },
-      { label: 'Игра Y', href: 'https://y.sneat.games' },
+      { label: 'Четыре в ряд', href: '/four-in-a-row/' },
+      { label: 'Гомоку', href: '/gomoku/' },
+      { label: 'Ультимативные крестики-нолики', href: '/ultimate-tictactoe/' },
+      { label: 'Доминиринг', href: '/domineering/' },
+      { label: 'Игра Y', href: '/y/' },
       { label: 'Все игры', href: '#games' },
       { label: 'Как это работает', href: '#how-it-works' },
     ],
