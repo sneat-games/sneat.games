@@ -1,0 +1,11 @@
+{
+  "games": {
+    "reversi": {
+      "repo": "sneat-games/reversi",
+      "version": "web-23840e5097e3",
+      "asset": "reversi-web-23840e5097e3.tar.gz",
+      "url": "https://github.com/sneat-games/reversi/releases/download/web-23840e5097e3/reversi-web-23840e5097e3.tar.gz",
+      "sha256": "fd1727f7d771f9c10d02e4dd8dd74df338fcb64dc963a2d0f267b67a1c119e10"
+    }
+  }
+}

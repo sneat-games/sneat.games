@@ -10,3 +10,7 @@ dist/
 # Agent scratch worktrees — a nested worktree here once showed up as
 # untracked repo content (an agent created it inside the canonical clone).
 .claude/worktrees/
+
+# Local canary browser check (scripts/canary)
+test-results/
+playwright-report/

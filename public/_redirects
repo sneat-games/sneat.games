@@ -1,0 +1,19 @@
+# Static redirects for the assets-only sneat-games Worker (replaces the old
+# worker.js router). Path-only rules apply on every hostname attached to the
+# Worker; the retired <game>.sneat.games hosts are moved away first by the
+# zone Single Redirect (docs/cloudflare-cutover.md), except /sw.js and
+# /__migrate.html.
+#
+# NEVER add a splat rewrite for a game directory (e.g. /reversi/* -> index.html
+# 200): redirects are followed "regardless of whether or not an asset matches",
+# so it would serve HTML for /reversi/_astro/*.js. Deep links are handled by
+# the generated /<slug>/404.html instead.
+
+# Default locale (en) home is the bare root.
+/en          /              301
+/en/         /              301
+# Unprefixed legal pages -> the default locale's copy.
+/privacy     /en/privacy/   301
+/privacy/    /en/privacy/   301
+/terms       /en/terms/     301
+/terms/      /en/terms/     301

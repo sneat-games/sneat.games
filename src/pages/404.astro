@@ -1,0 +1,25 @@
+---
+/**
+ * Root 404. The Worker is assets-only with `not_found_handling: "404-page"`,
+ * so a miss anywhere outside a game directory gets this page with status 404.
+ * Each game directory has its own generated `/<slug>/404.html`
+ * (scripts/games-lock.mjs) that sends deep links back to the game instead.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout locale="en" title="Page not found — Sneat Games" description="This page does not exist.">
+  <main class="not-found">
+    <h1>Page not found</h1>
+    <p>There is nothing at this address. <a href="/">See all Sneat Games</a>.</p>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 40rem;
+    margin: 4rem auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+</style>
