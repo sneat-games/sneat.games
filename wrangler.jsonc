@@ -3,19 +3,27 @@
   "name": "sneat-games",
   "compatibility_date": "2026-06-23",
   "workers_dev": true,
-  // Edge router (worker.js): folds /en/ -> /, sends unprefixed legal pages to
-  // the default locale, and otherwise serves the built static asset. There is
-  // no app behind this site — an asset miss 404s as itself.
-  "main": "worker.js",
+  // ASSETS-ONLY: no `main`, so no Worker code ever runs and no request
+  // counts against the Workers daily request quota (2026-10-16: Error 1027
+  // took the old run_worker_first router down with every game on it).
+  // Routing is static:
+  //   - public/_redirects: /en -> /, /privacy|/terms -> /en/...
+  //   - html_handling (default auto-trailing-slash): /reversi -> /reversi/
+  //   - 404-page: a miss gets the NEAREST 404.html — the landing's own
+  //     src/pages/404.astro, or a game's generated /<slug>/404.html, which
+  //     sends deep links back to /<slug>/ (scripts/games-lock.mjs)
+  // Games live under /<slug>/ from pinned release assets (games.lock.json).
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS",
-    "run_worker_first": true,
-    "not_found_handling": "none"
+    "not_found_handling": "404-page"
   },
   // Apex custom domain — Cloudflare manages the proxied DNS record + TLS cert.
   // We deliberately do NOT add a www custom domain (that serves duplicate
   // content); use a zone Redirect Rule (www -> apex, 301) instead.
+  //
+  // At canary time the retired game hosts (reversi.sneat.games, ...) are
+  // added here as custom domains too, so they serve the /sw.js kill switch
+  // and /__migrate.html. Not yet: see docs/cloudflare-cutover.md.
   "routes": [
     { "pattern": "sneat.games", "custom_domain": true }
   ]
