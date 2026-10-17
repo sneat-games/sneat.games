@@ -127,7 +127,7 @@ export const ru: Copy = {
         examples:
           'Классическая стратегия с переворотом фишек. Выберите цвет, играйте против ИИ или случайного соперника и захватите большинство фишек на доске.',
         platforms: [
-          { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
+          { kind: 'telegram', status: 'live', href: 'https://t.me/SneatGamesBot?start=reversi' },
           { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
         ],
       },
@@ -136,7 +136,7 @@ export const ru: Copy = {
         title: 'Камень · Ножницы · Бумага',
         examples:
           'Вечная игра на бесконечной серии, со счётом «победы–ничьи–поражения». ИИ подмечает ваши привычки — так что будьте непредсказуемы.',
-        platforms: [{ kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=rps' }],
+        platforms: [{ kind: 'telegram', status: 'live', href: 'https://t.me/SneatGamesBot?start=rps' }],
       },
       {
         icon: '🔴',
@@ -212,7 +212,7 @@ export const ru: Copy = {
       { label: 'Гекс', href: 'https://hex.sneat.games' },
       { label: 'Точки и квадраты', href: 'https://dots-and-boxes.sneat.games' },
       { label: 'Реверси', href: 'https://reversi.sneat.games' },
-      { label: 'Камень-ножницы-бумага', href: 'https://t.me/SneatBot?start=rps' },
+      { label: 'Камень-ножницы-бумага', href: 'https://t.me/SneatGamesBot?start=rps' },
       { label: 'Четыре в ряд', href: 'https://four-in-a-row.sneat.games' },
       { label: 'Гомоку', href: 'https://gomoku.sneat.games' },
       { label: 'Ультимативные крестики-нолики', href: 'https://ultimate-tictactoe.sneat.games' },
@@ -259,7 +259,7 @@ export const ru: Copy = {
       },
       {
         title: 'Игры в Telegram',
-        body: '«Реверси» и «Камень-ножницы-бумага» живут в @SneatBot, и вся игра умещается в самом сообщении Telegram — на наших серверах ничего не хранится. Greed Game сегодня играется в браузере, и к ней относится всё, что написано выше; если у неё появится собственный бот, он будет хранить небольшую игровую сессию (кто играет и текущий счёт в игровых очках) только пока идёт игра. А раз вы играете внутри Telegram, к вашему аккаунту применяется его политика конфиденциальности.',
+        body: '«Реверси» и «Камень-ножницы-бумага» живут в @SneatGamesBot, и вся игра умещается в самом сообщении Telegram — на наших серверах ничего не хранится. Greed Game сегодня играется в браузере, и к ней относится всё, что написано выше; если у неё появится собственный бот, он будет хранить небольшую игровую сессию (кто играет и текущий счёт в игровых очках) только пока идёт игра. А раз вы играете внутри Telegram, к вашему аккаунту применяется его политика конфиденциальности.',
       },
       {
         title: 'Хостинг',

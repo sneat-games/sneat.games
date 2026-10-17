@@ -8,7 +8,7 @@ import { getCopy } from './copy';
 import type { LangCode } from './languages';
 
 /** The bot the header CTA opens (Reversi + Rock-Paper-Scissors live here). */
-const SNEAT_BOT = 'https://t.me/SneatBot';
+const SNEAT_BOT = 'https://t.me/SneatGamesBot';
 
 export const siteMeta: SiteMeta = {
   name: 'Sneat Games',
