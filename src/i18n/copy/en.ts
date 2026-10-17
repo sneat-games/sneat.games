@@ -18,7 +18,7 @@
  * near miss — our bidding twist, but on a board everybody already knows.
  *
  * Deep links: the Telegram platforms open a bot with a /start payload
- * (t.me/SneatBot?start=reversi | rps). SneatBot routes that payload straight
+ * (t.me/SneatGamesBot?start=reversi | rps). SneatGamesBot routes that payload straight
  * into the game. The Greed Game's own bot does not exist yet, so its card names
  * only the browser — add { kind: 'telegram', status: 'live',
  * href: 'https://t.me/GreedGameBot?start=play' } when @GreedGameBot ships, and
@@ -129,7 +129,7 @@ export const en: Copy = {
         examples:
           'The classic disc-flipping strategy game. Pick your colour, play against an AI or a random opponent, and outflank the board to own the most discs.',
         platforms: [
-          { kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=reversi' },
+          { kind: 'telegram', status: 'live', href: 'https://t.me/SneatGamesBot?start=reversi' },
           { kind: 'browser', status: 'live', href: 'https://reversi.sneat.games' },
         ],
       },
@@ -138,7 +138,7 @@ export const en: Copy = {
         title: 'Rock · Paper · Scissors',
         examples:
           'The timeless hand game over an endless streak, with a running win–draw–loss score. The AI learns your habits — so keep it unpredictable.',
-        platforms: [{ kind: 'telegram', status: 'live', href: 'https://t.me/SneatBot?start=rps' }],
+        platforms: [{ kind: 'telegram', status: 'live', href: 'https://t.me/SneatGamesBot?start=rps' }],
       },
       {
         icon: '🔴',
@@ -215,7 +215,7 @@ export const en: Copy = {
       { label: 'Hex', href: 'https://hex.sneat.games' },
       { label: 'Dots & Boxes', href: 'https://dots-and-boxes.sneat.games' },
       { label: 'Reversi', href: 'https://reversi.sneat.games' },
-      { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatBot?start=rps' },
+      { label: 'Rock-Paper-Scissors', href: 'https://t.me/SneatGamesBot?start=rps' },
       { label: 'Four in a Row', href: 'https://four-in-a-row.sneat.games' },
       { label: 'Gomoku', href: 'https://gomoku.sneat.games' },
       { label: 'Ultimate Tic-Tac-Toe', href: 'https://ultimate-tictactoe.sneat.games' },
@@ -262,7 +262,7 @@ export const en: Copy = {
       },
       {
         title: 'Games in Telegram',
-        body: 'Reversi and Rock-Paper-Scissors are played through @SneatBot, and the whole game sits inside the Telegram message itself — no game data is stored on our servers. The Greed Game plays in your browser today, under the sections above; if its own bot ships, that bot will keep a small game session (who is playing and the running score in play tokens) only while the game runs. Because you are playing inside Telegram, Telegram’s own privacy policy covers your Telegram account.',
+        body: 'Reversi and Rock-Paper-Scissors are played through @SneatGamesBot, and the whole game sits inside the Telegram message itself — no game data is stored on our servers. The Greed Game plays in your browser today, under the sections above; if its own bot ships, that bot will keep a small game session (who is playing and the running score in play tokens) only while the game runs. Because you are playing inside Telegram, Telegram’s own privacy policy covers your Telegram account.',
       },
       {
         title: 'Hosting',

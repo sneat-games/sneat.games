@@ -20,12 +20,12 @@ listing both, rather than the two cards in two sections it used to be.
 | Bidding Tic-Tac-Toe | `bidding-tictactoe.sneat.games` | — |
 | Hex | `hex.sneat.games` | — |
 | Dots & Boxes | `dots-and-boxes.sneat.games` | — |
-| Reversi | `reversi.sneat.games` *(soon)* | `t.me/SneatBot?start=reversi` |
-| Rock-Paper-Scissors | — | `t.me/SneatBot?start=rps` |
+| Reversi | `reversi.sneat.games` *(soon)* | `t.me/SneatGamesBot?start=reversi` |
+| Rock-Paper-Scissors | — | `t.me/SneatGamesBot?start=rps` |
 | The Greed Game | — | @GreedGameBot *(soon)* |
 | Four in a Row, Gomoku, Ultimate Tic-Tac-Toe, Domineering, Y | *(soon)* | — |
 
-The `?start=<payload>` deep links rely on SneatBot routing the `/start` payload
+The `?start=<payload>` deep links rely on SneatGamesBot routing the `/start` payload
 straight into the game. The browser games are the `*.sneat.games` game-kit
 family (see `game-kit/docs/DESIGN.md`).
 
