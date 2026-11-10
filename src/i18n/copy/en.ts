@@ -228,6 +228,7 @@ export const en: Copy = {
     more: [
       { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },
+      { label: 'Tech stack', href: '/about/tech-stack/' },
     ],
     legal: { before: 'built on the ', link: 'Sneat platform', after: '.' },
   },

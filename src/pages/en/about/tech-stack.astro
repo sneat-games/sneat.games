@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  locale="en"
+  title="Sneat Games tech stack — one catalog, many places to play"
+  description="How Astro, typed bilingual content, and Cloudflare static assets connect Sneat Games to browser and Telegram games."
+>
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">About Sneat Games</p>
+      <h1>The technology behind Sneat Games</h1>
+      <p class="lede">
+        This site is a map of places to play. Some games open in a browser,
+        others in Telegram, and a game can have both homes. The catalog gives
+        each game one card and shows which places are playable now.
+      </p>
+
+      <h2>A small, bilingual front door</h2>
+      <p>
+        <a href="https://astro.build/">Astro</a> builds the English and Russian
+        pages as static files. The shared <code>@sneat/astro</code> layout supplies
+        the language switcher, page metadata and matching language links.
+        TypeScript copy modules hold each game's description and platform
+        status, so a “coming soon” destination does not become a dead link.
+      </p>
+
+      <h2>From one card to the right game</h2>
+      <p>
+        Cards point to each browser game's own address or to a Telegram bot deep
+        link. A game with two ways to play still has one place in the catalog.
+        Browser releases can also be pinned by version and SHA-256 in the site's
+        game lockfile before their files are bundled under a game path. This
+        keeps the catalog's deployment tied to an exact game build.
+      </p>
+      <p>
+        Cloudflare Workers serves the finished site as static assets. Asset
+        redirects send short English addresses to their canonical pages, and
+        Astro generates a sitemap for both languages.
+        <a href="/#games">Browse the games</a> to pick a playable destination.
+      </p>
+
+      <p class="back"><a href="/">← Back to Sneat Games</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose { max-width: 760px; }
+  .prose h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); margin-bottom: var(--space-3); }
+  .prose h2 { font-size: 1.3rem; margin-top: var(--space-4); }
+  .lede { font-size: 1.1rem; }
+  .back { margin-top: var(--space-4); font-weight: 600; }
+</style>

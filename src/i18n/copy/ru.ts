@@ -225,6 +225,7 @@ export const ru: Copy = {
     more: [
       { label: 'Конфиденциальность', href: '/privacy' },
       { label: 'Условия', href: '/terms' },
+      { label: 'Технологии', href: '/about/tech-stack/' },
     ],
     legal: { before: 'на платформе ', link: 'Sneat', after: '.' },
   },
